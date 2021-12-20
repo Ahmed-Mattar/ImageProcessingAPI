@@ -8,7 +8,7 @@
 		"jasmine": "jasmine",
 		"start": "nodemon src/index.ts",
 		"build": "npx tsc",
-		"lint": "eslint --ext .js,.ts .",
+		"lint": "eslint --ext .ts .",
 		"prettier": "prettier --config .prettierrc src/**/*.ts --write"
 	},
 	"keywords": [],
@@ -23,6 +23,8 @@
 		"@typescript-eslint/parser": "^5.7.0",
 		"axios": "^0.24.0",
 		"eslint": "^8.5.0",
+		"jasmine": "^3.10.0",
+		"jasmine-spec-reporter": "^7.0.0",
 		"nodemon": "^2.0.15",
 		"prettier": "^2.5.1",
 		"ts-node": "^10.4.0",
@@ -30,8 +32,6 @@
 	},
 	"dependencies": {
 		"express": "^4.17.2",
-		"jasmine": "^3.10.0",
-		"jasmine-spec-reporter": "^7.0.0",
 		"sharp": "^0.29.3"
 	}
 }

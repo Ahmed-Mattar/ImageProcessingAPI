@@ -64,7 +64,6 @@ describe('image processing server', function () {
         var filename = 'asdqwda'; // non existent image
         it('returns status code 404 and image is not found', function () {
             return __awaiter(this, void 0, void 0, function () {
-                var response;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
@@ -75,7 +74,7 @@ describe('image processing server', function () {
                                     expect(error.response.status).toBe(404);
                                 })];
                         case 1:
-                            response = _a.sent();
+                            _a.sent();
                             return [2 /*return*/];
                     }
                 });

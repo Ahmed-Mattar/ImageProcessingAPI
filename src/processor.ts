@@ -3,9 +3,20 @@ import path from 'path';
 import fs from 'fs';
 import express from 'express';
 
-const prepareImageProperties = (filename: string, width: number, height: number, res: express.Response) => {
+const prepareImageProperties = (
+	filename: string,
+	width: number,
+	height: number,
+	res: express.Response
+):
+	| {
+			imagePath: string;
+			width: number;
+			height: number;
+		}
+	| undefined => {
 	try {
-		let imagePath = path.join(__dirname, '/../assets/original-images/', filename + '.jpg');
+		const imagePath = path.join(__dirname, '/../assets/original-images/', filename + '.jpg');
 
 		if (fs.existsSync(imagePath)) {
 			return {
@@ -23,13 +34,13 @@ const prepareImageProperties = (filename: string, width: number, height: number,
 	}
 };
 
-const resize = async (imagePath: string, width: number, height: number, res: express.Response) => {
+const resize = async (imagePath: string, width: number, height: number, res: express.Response): Promise<string> => {
 	try {
 		console.log('in resize');
-		let routes = imagePath.split('\\');
-		let imageName = routes[routes.length - 1];
+		const routes = imagePath.split('\\');
+		const imageName = routes[routes.length - 1];
 
-		let outputPath = path.join(__dirname, '../assets/modified-images', `${width}-${height}-${imageName}`);
+		const outputPath = path.join(__dirname, '../assets/modified-images', `${width}-${height}-${imageName}`);
 		await sharp(imagePath)
 			.resize({
 				width,
@@ -41,13 +52,13 @@ const resize = async (imagePath: string, width: number, height: number, res: exp
 		let message;
 		if (error instanceof Error) message = error.message;
 		res.status(500).send(message);
+		return '';
 	}
 };
 
 const doesExist = (imageName: string, width: number, height: number): string => {
-	let testingPath = path.join(__dirname, '/../assets/modified-images/', `${width}-${height}-${imageName}.jpg`);
-	let result = fs.existsSync(testingPath);
-	console.log(result, testingPath);
+	const testingPath = path.join(__dirname, '/../assets/modified-images/', `${width}-${height}-${imageName}.jpg`);
+	const result = fs.existsSync(testingPath);
 	if (result) return testingPath;
 	else return '';
 };

@@ -61,7 +61,6 @@ app.get('/api/image/', function (req, res) { return __awaiter(void 0, void 0, vo
                 imageName = req.query.filename;
                 width = Number(req.query.width) || 400;
                 height = Number(req.query.height) || 400;
-                console.log(width, height);
                 exist = processor_1.default.doesExist(imageName, width, height);
                 if (exist) {
                     res.sendFile(exist);

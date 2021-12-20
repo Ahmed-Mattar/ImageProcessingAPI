@@ -5,7 +5,7 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
-	let html: string =
+	const html =
 		'<h2>usage info</h2>\
 			   <p>route: api/image</p><br>\
 			   <p>req query params</p><br>\
@@ -18,23 +18,23 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/image/', async (req, res) => {
-	let imageName: string = req.query.filename as string;
-	let width = Number(req.query.width) || 400;
-	let height = Number(req.query.height) || 400;
+	const imageName: string = req.query.filename as string;
+	const width = Number(req.query.width) || 400;
+	const height = Number(req.query.height) || 400;
 
 	// check if it is already exist with the same width and height and if not it will continue
-	let exist = processor.doesExist(imageName, width, height);
+	const exist = processor.doesExist(imageName, width, height);
 	if (exist) {
 		res.sendFile(exist);
 		return;
 	}
 
 	// prepare info
-	let propertiesObj = processor.prepareImageProperties(imageName, width, height, res);
+	const propertiesObj = processor.prepareImageProperties(imageName, width, height, res);
 
 	// resize image
 	if (propertiesObj) {
-		let result = await processor.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height, res);
+		const result = await processor.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height, res);
 		if (result) {
 			res.sendFile(result);
 		}

@@ -95,7 +95,6 @@ var resize = function (imagePath, width, height, res) { return __awaiter(void 0,
 var doesExist = function (imageName, width, height) {
     var testingPath = path_1.default.join(__dirname, '/../assets/modified-images/', "".concat(width, "-").concat(height, "-").concat(imageName, ".jpg"));
     var result = fs_1.default.existsSync(testingPath);
-    console.log(result, testingPath);
     if (result)
         return testingPath;
     else
