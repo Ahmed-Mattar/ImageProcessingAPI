@@ -23,6 +23,29 @@ const prepareImageProperties = (filename: string, width: number, height: number,
 	}
 };
 
-const resize = async (path: string, width: number, height: number) => {};
+const resize = async (imagePath: string, width: number, height: number, res: express.Response) => {
+	try {
+		let routes = imagePath.split('\\');
+		let imageName = routes[routes.length - 1];
 
-export = { prepareImageProperties, resize };
+		console.log(imageName);
+		let outputPath = path.join(__dirname, '../assets/modified-images', `${width}-${height}-${imageName}`);
+		await sharp(imagePath)
+			.resize({
+				width,
+				height
+			})
+			.toFile(outputPath);
+		return outputPath;
+	} catch (error) {
+		let message;
+		if (error instanceof Error) message = error.message;
+		res.status(500).send(message);
+	}
+};
+
+const doesExist = (): string => {
+	return '';
+};
+
+export = { prepareImageProperties, resize, doesExist };

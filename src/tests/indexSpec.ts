@@ -11,7 +11,7 @@ describe('image processing server', function() {
 		});
 	});
 
-	describe('GET /api/image/  sending wrong image name', function() {
+	describe('GET /api/image/  sending a wrong image name', function() {
 		let width = 250;
 		let height = 250;
 		let filename = 'asdqwda'; // non existent image
@@ -22,6 +22,19 @@ describe('image processing server', function() {
 				.catch((error) => {
 					expect(error.response.status).toBe(404);
 				});
+		});
+	});
+
+	describe('GET /api/image/  sending a correct image name', function() {
+		let width = 250;
+		let height = 250;
+		let filename = 'fjord';
+		it('returns status code 200 and image is found', async function() {
+			console.log(base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`);
+			let response = await axios.get(
+				base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`
+			);
+			expect(response.status).toBe(200);
 		});
 	});
 });

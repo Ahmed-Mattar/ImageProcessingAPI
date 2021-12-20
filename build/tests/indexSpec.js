@@ -58,7 +58,7 @@ describe('image processing server', function () {
             });
         });
     });
-    describe('GET /api/image/  sending wrong image name', function () {
+    describe('GET /api/image/  sending a wrong image name', function () {
         var width = 250;
         var height = 250;
         var filename = 'asdqwda'; // non existent image
@@ -76,6 +76,27 @@ describe('image processing server', function () {
                                 })];
                         case 1:
                             response = _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        });
+    });
+    describe('GET /api/image/  sending a correct image name', function () {
+        var width = 250;
+        var height = 250;
+        var filename = 'fjord';
+        it('returns status code 200 and image is found', function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var response;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            console.log(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height));
+                            return [4 /*yield*/, axios_1.default.get(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height))];
+                        case 1:
+                            response = _a.sent();
+                            expect(response.status).toBe(200);
                             return [2 /*return*/];
                     }
                 });

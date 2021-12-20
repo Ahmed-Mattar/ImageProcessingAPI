@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
 var fs_1 = __importDefault(require("fs"));
 var prepareImageProperties = function (filename, width, height, res) {
@@ -62,7 +63,37 @@ var prepareImageProperties = function (filename, width, height, res) {
         res.status(404).send(message);
     }
 };
-var resize = function (path, width, height) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
-module.exports = { prepareImageProperties: prepareImageProperties, resize: resize };
+var resize = function (imagePath, width, height, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var routes, imageName, outputPath, error_1, message;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                routes = imagePath.split('\\');
+                imageName = routes[routes.length - 1];
+                console.log(imageName);
+                outputPath = path_1.default.join(__dirname, '../assets/modified-images', "".concat(width, "-").concat(height, "-").concat(imageName));
+                return [4 /*yield*/, (0, sharp_1.default)(imagePath)
+                        .resize({
+                        width: width,
+                        height: height
+                    })
+                        .toFile(outputPath)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, outputPath];
+            case 2:
+                error_1 = _a.sent();
+                message = void 0;
+                if (error_1 instanceof Error)
+                    message = error_1.message;
+                res.status(500).send(message);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+var doesExist = function () {
+    return '';
+};
+module.exports = { prepareImageProperties: prepareImageProperties, resize: resize, doesExist: doesExist };

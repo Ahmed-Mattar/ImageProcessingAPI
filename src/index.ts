@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 	res.send(html);
 });
 
-app.get('/api/image/', (req, res) => {
+app.get('/api/image/', async (req, res) => {
 	let imageName: string = req.query.filename as string;
 	let width = 400;
 	let height = 400;
@@ -27,7 +27,16 @@ app.get('/api/image/', (req, res) => {
 		height = Number(req.query.height);
 	}
 
+	// prepare info
 	let propertiesObj = processor.prepareImageProperties(imageName, width, height, res);
+
+	// resize image
+	if (propertiesObj) {
+		let result = await processor.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height, res);
+		if (result) {
+			res.sendFile(result);
+		}
+	}
 
 	console.log(propertiesObj);
 });
