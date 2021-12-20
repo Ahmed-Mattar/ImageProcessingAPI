@@ -16,6 +16,8 @@ npm install
 ```
 ## endpoints
 '/'  just the home page with useful info
+
+
 '/api/image/   the main endpoint takes filename,width,height params 
 example '/api/image/?filename=fjord&width=400&height=400
 ## Scripts
