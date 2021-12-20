@@ -44,7 +44,6 @@ var fs_1 = __importDefault(require("fs"));
 var prepareImageProperties = function (filename, width, height, res) {
     try {
         var imagePath = path_1.default.join(__dirname, '/../assets/original-images/', filename + '.jpg');
-        console.log(imagePath);
         if (fs_1.default.existsSync(imagePath)) {
             return {
                 imagePath: imagePath,
@@ -69,9 +68,9 @@ var resize = function (imagePath, width, height, res) { return __awaiter(void 0,
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
+                console.log('in resize');
                 routes = imagePath.split('\\');
                 imageName = routes[routes.length - 1];
-                console.log(imageName);
                 outputPath = path_1.default.join(__dirname, '../assets/modified-images', "".concat(width, "-").concat(height, "-").concat(imageName));
                 return [4 /*yield*/, (0, sharp_1.default)(imagePath)
                         .resize({
@@ -93,7 +92,13 @@ var resize = function (imagePath, width, height, res) { return __awaiter(void 0,
         }
     });
 }); };
-var doesExist = function () {
-    return '';
+var doesExist = function (imageName, width, height) {
+    var testingPath = path_1.default.join(__dirname, '/../assets/modified-images/', "".concat(width, "-").concat(height, "-").concat(imageName, ".jpg"));
+    var result = fs_1.default.existsSync(testingPath);
+    console.log(result, testingPath);
+    if (result)
+        return testingPath;
+    else
+        return '';
 };
 module.exports = { prepareImageProperties: prepareImageProperties, resize: resize, doesExist: doesExist };

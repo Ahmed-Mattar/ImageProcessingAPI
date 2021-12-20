@@ -83,8 +83,8 @@ describe('image processing server', function () {
         });
     });
     describe('GET /api/image/  sending a correct image name', function () {
-        var width = 250;
-        var height = 250;
+        var width = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
+        var height = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
         var filename = 'fjord';
         it('returns status code 200 and image is found', function () {
             return __awaiter(this, void 0, void 0, function () {

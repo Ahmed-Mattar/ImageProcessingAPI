@@ -22,8 +22,7 @@ app.get('/api/image/', async (req, res) => {
 	let width = Number(req.query.width) || 400;
 	let height = Number(req.query.height) || 400;
 
-	console.log(width, height);
-	// check if it is already exist with the same width and height
+	// check if it is already exist with the same width and height and if not it will continue
 	let exist = processor.doesExist(imageName, width, height);
 	if (exist) {
 		res.sendFile(exist);

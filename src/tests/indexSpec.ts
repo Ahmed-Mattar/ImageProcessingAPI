@@ -26,8 +26,8 @@ describe('image processing server', function() {
 	});
 
 	describe('GET /api/image/  sending a correct image name', function() {
-		let width = 250;
-		let height = 250;
+		let width = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
+		let height = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
 		let filename = 'fjord';
 		it('returns status code 200 and image is found', async function() {
 			console.log(base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`);

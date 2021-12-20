@@ -54,16 +54,18 @@ app.get('/', function (req, res) {
     res.send(html);
 });
 app.get('/api/image/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var imageName, width, height, propertiesObj, result;
+    var imageName, width, height, exist, propertiesObj, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 imageName = req.query.filename;
-                width = 400;
-                height = 400;
-                if (Number(req.query.width) && Number(req.query.height)) {
-                    width = Number(req.query.width);
-                    height = Number(req.query.height);
+                width = Number(req.query.width) || 400;
+                height = Number(req.query.height) || 400;
+                console.log(width, height);
+                exist = processor_1.default.doesExist(imageName, width, height);
+                if (exist) {
+                    res.sendFile(exist);
+                    return [2 /*return*/];
                 }
                 propertiesObj = processor_1.default.prepareImageProperties(imageName, width, height, res);
                 if (!propertiesObj) return [3 /*break*/, 2];
@@ -74,9 +76,7 @@ app.get('/api/image/', function (req, res) { return __awaiter(void 0, void 0, vo
                     res.sendFile(result);
                 }
                 _a.label = 2;
-            case 2:
-                console.log(propertiesObj);
-                return [2 /*return*/];
+            case 2: return [2 /*return*/];
         }
     });
 }); });
