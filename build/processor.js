@@ -38,48 +38,31 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __importDefault(require("axios"));
-describe('image processing server', function () {
-    var base_url = 'http://localhost:3000/';
-    describe('GET /    check if server is online', function () {
-        it('returns status code 200', function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var response;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, axios_1.default.get(base_url)];
-                        case 1:
-                            response = _a.sent();
-                            expect(response.status).toBe(200);
-                            return [2 /*return*/];
-                    }
-                });
-            });
-        });
-    });
-    describe('GET /api/image/  sending wrong image name', function () {
-        var width = 250;
-        var height = 250;
-        var filename = 'asdqwda'; // non existent image
-        it('returns status code 404 and image is not found', function () {
-            return __awaiter(this, void 0, void 0, function () {
-                var response;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            console.log(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height));
-                            return [4 /*yield*/, axios_1.default
-                                    .get(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height))
-                                    .catch(function (error) {
-                                    expect(error.response.status).toBe(404);
-                                })];
-                        case 1:
-                            response = _a.sent();
-                            return [2 /*return*/];
-                    }
-                });
-            });
-        });
-    });
-});
+var path_1 = __importDefault(require("path"));
+var fs_1 = __importDefault(require("fs"));
+var prepareImageProperties = function (filename, width, height, res) {
+    try {
+        var imagePath = path_1.default.join(__dirname, '/../assets/original-images/', filename + '.jpg');
+        console.log(imagePath);
+        if (fs_1.default.existsSync(imagePath)) {
+            return {
+                imagePath: imagePath,
+                width: width,
+                height: height
+            };
+        }
+        else {
+            throw new Error('Please provide a correct image name which is located in assets/original-images folder');
+        }
+    }
+    catch (error) {
+        var message = void 0;
+        if (error instanceof Error)
+            message = error.message;
+        res.status(404).send(message);
+    }
+};
+var resize = function (path, width, height) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2 /*return*/];
+}); }); };
+module.exports = { prepareImageProperties: prepareImageProperties, resize: resize };
