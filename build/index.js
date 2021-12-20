@@ -54,7 +54,7 @@ app.get('/', function (req, res) {
     res.send(html);
 });
 app.get('/api/image/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var imageName, width, height, exist, propertiesObj, result;
+    var imageName, width, height, exist, propertiesObj, result, error_1, message;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -67,18 +67,29 @@ app.get('/api/image/', function (req, res) { return __awaiter(void 0, void 0, vo
                     return [2 /*return*/];
                 }
                 propertiesObj = processor_1.default.prepareImageProperties(imageName, width, height, res);
-                if (!propertiesObj) return [3 /*break*/, 2];
-                return [4 /*yield*/, processor_1.default.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height, res)];
+                if (!propertiesObj) return [3 /*break*/, 4];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, processor_1.default.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height)];
+            case 2:
                 result = _a.sent();
                 if (result) {
                     res.sendFile(result);
                 }
-                _a.label = 2;
-            case 2: return [2 /*return*/];
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                message = void 0;
+                if (error_1 instanceof Error)
+                    message = error_1.message;
+                res.status(500).send(message);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
 app.listen(port, function () {
     console.log("app is up and running at http://localhost:".concat(port));
 });
+exports.default = app;

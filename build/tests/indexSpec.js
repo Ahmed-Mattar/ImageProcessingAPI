@@ -39,16 +39,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __importDefault(require("axios"));
-describe('image processing server', function () {
-    var base_url = 'http://localhost:3000/';
-    describe('GET /    check if server is online', function () {
-        it('returns status code 200', function () {
+var processor_1 = __importDefault(require("../processor"));
+var path_1 = __importDefault(require("path"));
+var supertest_1 = __importDefault(require("supertest"));
+var index_1 = __importDefault(require("../index"));
+var request = (0, supertest_1.default)(index_1.default);
+describe('TEST endpoints responses', function () {
+    describe('get /', function () {
+        it('Return 200', function () {
             return __awaiter(this, void 0, void 0, function () {
                 var response;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, axios_1.default.get(base_url)];
+                        case 0: return [4 /*yield*/, request.get('/')];
                         case 1:
                             response = _a.sent();
                             expect(response.status).toBe(200);
@@ -58,44 +61,74 @@ describe('image processing server', function () {
             });
         });
     });
-    describe('GET /api/image/  sending a wrong image name', function () {
-        var width = 250;
-        var height = 250;
-        var filename = 'asdqwda'; // non existent image
-        it('returns status code 404 and image is not found', function () {
+    describe('get /api/image/', function () {
+        it('Return 200', function () {
             return __awaiter(this, void 0, void 0, function () {
+                var routeWithParams, response;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height));
-                            return [4 /*yield*/, axios_1.default
-                                    .get(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height))
-                                    .catch(function (error) {
-                                    expect(error.response.status).toBe(404);
-                                })];
+                            routeWithParams = "/api/image/?filename=fjord&width=300&height=300";
+                            return [4 /*yield*/, request.get(routeWithParams)];
                         case 1:
-                            _a.sent();
+                            response = _a.sent();
+                            expect(response.status).toBe(200);
                             return [2 /*return*/];
                     }
                 });
             });
         });
     });
-    describe('GET /api/image/  sending a correct image name', function () {
-        var width = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
-        var height = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
-        var filename = 'fjord';
-        it('returns status code 200 and image is found', function () {
+    describe('get /api/image/', function () {
+        it('Return 404 image does not exist', function () {
             return __awaiter(this, void 0, void 0, function () {
-                var response;
+                var routeWithParams, response;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            console.log(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height));
-                            return [4 /*yield*/, axios_1.default.get(base_url + "api/image/?filename=".concat(filename, "&width=").concat(width, "&height=").concat(height))];
+                            routeWithParams = "/api/image/?filename=noneexistent&width=300&height=300";
+                            return [4 /*yield*/, request.get(routeWithParams)];
                         case 1:
                             response = _a.sent();
-                            expect(response.status).toBe(200);
+                            expect(response.status).toBe(404);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        });
+    });
+});
+describe('TEST resize function', function () {
+    describe('should return the modified image path', function () {
+        it('a string of the image path', function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var image_url, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            image_url = path_1.default.join(__dirname, '../../assets/original-images', 'fjord.jpg');
+                            return [4 /*yield*/, processor_1.default.resize(image_url, 322, 400)];
+                        case 1:
+                            result = _a.sent();
+                            expect(result).toBeTruthy();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        });
+    });
+    describe('should return empty image path', function () {
+        it('empty string', function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var image_url, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            image_url = path_1.default.join(__dirname, '../../assets/original-images', 'noneexistentImage.jpg');
+                            return [4 /*yield*/, processor_1.default.resize(image_url, 400, 400)];
+                        case 1:
+                            result = _a.sent();
+                            expect(result).toBeFalsy();
                             return [2 /*return*/];
                     }
                 });

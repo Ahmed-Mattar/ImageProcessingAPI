@@ -34,13 +34,14 @@ const prepareImageProperties = (
 	}
 };
 
-const resize = async (imagePath: string, width: number, height: number, res: express.Response): Promise<string> => {
-	try {
-		console.log('in resize');
-		const routes = imagePath.split('\\');
-		const imageName = routes[routes.length - 1];
+const resize = async (imagePath: string, width: number, height: number): Promise<string> => {
+	//console.log('in resize');
+	const routes = imagePath.split('\\');
+	const imageName = routes[routes.length - 1];
 
-		const outputPath = path.join(__dirname, '../assets/modified-images', `${width}-${height}-${imageName}`);
+	const outputPath = path.join(__dirname, '../assets/modified-images', `${width}-${height}-${imageName}`);
+
+	try {
 		await sharp(imagePath)
 			.resize({
 				width,
@@ -49,9 +50,6 @@ const resize = async (imagePath: string, width: number, height: number, res: exp
 			.toFile(outputPath);
 		return outputPath;
 	} catch (error) {
-		let message;
-		if (error instanceof Error) message = error.message;
-		res.status(500).send(message);
 		return '';
 	}
 };

@@ -22,8 +22,8 @@ npm install
 example '/api/image/?filename=fjord&width=400&height=400
 ## Scripts
 use npm build to build the js files
-use npm test to run the tests but make sure the server is online first
-usee npm start to run the server
+use npm test to run the tests
+use npm start to run the server
 ```
 "test": "npm run build && npm run jasmine"
 "jasmine": "jasmine"

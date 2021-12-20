@@ -1,39 +1,49 @@
-import axios from 'axios';
+import processor from '../processor';
+import path from 'path';
+import supertest from 'supertest';
+import app from '../index';
 
-describe('image processing server', function() {
-	const base_url = 'http://localhost:3000/';
+const request = supertest(app);
 
-	describe('GET /    check if server is online', function() {
-		it('returns status code 200', async function() {
-			const response = await axios.get(base_url);
+describe('TEST endpoints responses', function() {
+	describe('get /', function() {
+		it('Return 200', async function() {
+			const response = await request.get('/');
 			expect(response.status).toBe(200);
 		});
 	});
+	describe('get /api/image/', function() {
+		it('Return 200', async function() {
+			const routeWithParams = `/api/image/?filename=fjord&width=300&height=300`;
+			const response = await request.get(routeWithParams);
+			expect(response.status).toBe(200);
+		});
+	});
+	describe('get /api/image/', function() {
+		it('Return 404 image does not exist', async function() {
+			const routeWithParams = `/api/image/?filename=noneexistent&width=300&height=300`;
+			const response = await request.get(routeWithParams);
+			expect(response.status).toBe(404);
+		});
+	});
+});
 
-	describe('GET /api/image/  sending a wrong image name', function() {
-		const width = 250;
-		const height = 250;
-		const filename = 'asdqwda'; // non existent image
-		it('returns status code 404 and image is not found', async function() {
-			console.log(base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`);
-			await axios
-				.get(base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`)
-				.catch((error) => {
-					expect(error.response.status).toBe(404);
-				});
+describe('TEST resize function', function() {
+	describe('should return the modified image path', function() {
+		it('a string of the image path', async function() {
+			const image_url = path.join(__dirname, '../../assets/original-images', 'fjord.jpg');
+
+			const result = await processor.resize(image_url, 322, 400);
+			expect(result).toBeTruthy();
 		});
 	});
 
-	describe('GET /api/image/  sending a correct image name', function() {
-		const width = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
-		const height = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
-		const filename = 'fjord';
-		it('returns status code 200 and image is found', async function() {
-			console.log(base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`);
-			const response = await axios.get(
-				base_url + `api/image/?filename=${filename}&width=${width}&height=${height}`
-			);
-			expect(response.status).toBe(200);
+	describe('should return empty image path', function() {
+		it('empty string', async function() {
+			const image_url = path.join(__dirname, '../../assets/original-images', 'noneexistentImage.jpg');
+
+			const result = await processor.resize(image_url, 400, 400);
+			expect(result).toBeFalsy();
 		});
 	});
 });

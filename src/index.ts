@@ -34,9 +34,15 @@ app.get('/api/image/', async (req, res) => {
 
 	// resize image
 	if (propertiesObj) {
-		const result = await processor.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height, res);
-		if (result) {
-			res.sendFile(result);
+		try {
+			const result = await processor.resize(propertiesObj.imagePath, propertiesObj.width, propertiesObj.height);
+			if (result) {
+				res.sendFile(result);
+			}
+		} catch (error) {
+			let message;
+			if (error instanceof Error) message = error.message;
+			res.status(500).send(message);
 		}
 	}
 });
@@ -44,3 +50,5 @@ app.get('/api/image/', async (req, res) => {
 app.listen(port, () => {
 	console.log(`app is up and running at http://localhost:${port}`);
 });
+
+export default app;
