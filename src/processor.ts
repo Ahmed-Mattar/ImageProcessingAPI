@@ -6,7 +6,7 @@ import express from 'express';
 const prepareImageProperties = (filename: string, width: number, height: number, res: express.Response) => {
 	try {
 		let imagePath = path.join(__dirname, '/../assets/original-images/', filename + '.jpg');
-		console.log(imagePath);
+
 		if (fs.existsSync(imagePath)) {
 			return {
 				imagePath,
@@ -25,10 +25,10 @@ const prepareImageProperties = (filename: string, width: number, height: number,
 
 const resize = async (imagePath: string, width: number, height: number, res: express.Response) => {
 	try {
+		console.log('in resize');
 		let routes = imagePath.split('\\');
 		let imageName = routes[routes.length - 1];
 
-		console.log(imageName);
 		let outputPath = path.join(__dirname, '../assets/modified-images', `${width}-${height}-${imageName}`);
 		await sharp(imagePath)
 			.resize({
@@ -44,8 +44,12 @@ const resize = async (imagePath: string, width: number, height: number, res: exp
 	}
 };
 
-const doesExist = (): string => {
-	return '';
+const doesExist = (imageName: string, width: number, height: number): string => {
+	let testingPath = path.join(__dirname, '/../assets/modified-images/', `${width}-${height}-${imageName}.jpg`);
+	let result = fs.existsSync(testingPath);
+	console.log(result, testingPath);
+	if (result) return testingPath;
+	else return '';
 };
 
 export = { prepareImageProperties, resize, doesExist };

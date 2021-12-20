@@ -19,12 +19,15 @@ app.get('/', (req, res) => {
 
 app.get('/api/image/', async (req, res) => {
 	let imageName: string = req.query.filename as string;
-	let width = 400;
-	let height = 400;
+	let width = Number(req.query.width) || 400;
+	let height = Number(req.query.height) || 400;
 
-	if (Number(req.query.width) && Number(req.query.height)) {
-		width = Number(req.query.width);
-		height = Number(req.query.height);
+	console.log(width, height);
+	// check if it is already exist with the same width and height
+	let exist = processor.doesExist(imageName, width, height);
+	if (exist) {
+		res.sendFile(exist);
+		return;
 	}
 
 	// prepare info
@@ -37,8 +40,6 @@ app.get('/api/image/', async (req, res) => {
 			res.sendFile(result);
 		}
 	}
-
-	console.log(propertiesObj);
 });
 
 app.listen(port, () => {
